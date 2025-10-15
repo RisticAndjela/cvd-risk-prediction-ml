@@ -10,7 +10,7 @@ class Patient(BaseModel):
     ap_hi: int = Field(..., description="Systolic blood pressure")
     ap_lo: int = Field(..., description="Diastolic blood pressure")
     cholesterol: int = Field(..., description="Cholesterol level (1 = normal, 2 = above normal, 3 = well above normal)")
-    glucose: int = Field(..., description="Glucose level (1 = normal, 2 = above normal, 3 = well above normal)")
+    gluc: int = Field(..., description="Glucose level (1 = normal, 2 = above normal, 3 = well above normal)")
     smoke: int = Field(..., description="Smoking status (0 = no, 1 = yes)")
     alco: int = Field(..., description="Alcohol intake (0 = no, 1 = yes)")
     active: int = Field(..., description="Physical activity (0 = no, 1 = yes)")
