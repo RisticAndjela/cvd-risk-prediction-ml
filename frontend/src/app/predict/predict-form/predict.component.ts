@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { PredictService } from '../predict.service';
 import { Patient, Gender } from '../../models/patient.model';
+import { DialogType, DialogComponent } from '../../shared/dialogs/message-dialog/dialog.component';
 
 type BooleanFields = 'smoke' | 'alco' | 'active';
 type Step3 = 1 | 2 | 3;
@@ -14,6 +15,11 @@ type Step3 = 1 | 2 | 3;
 export class PredictComponent {
   birthDate: Date | null = null;
   isLoading: boolean = false;
+
+  showDialog = false;
+  dialogType: DialogType = 'message';
+  dialogTitle = '';
+  dialogMessage = '';
 
   patient: Patient = {
     age: 0,
@@ -50,7 +56,31 @@ export class PredictComponent {
   }
 
   onSubmit() {
+    if (!this.birthDate) {
+      this.openDialog('error', 'Invalid Input', 'Please enter your date of birth.');
+      return;
+    }
+    
     this.updateAge();
+    if (this.patient.age<=0) {
+      this.openDialog('error', 'Invalid Input', 'Date of birth cannot be in the future.');
+      return;
+    }
+
+    if (this.patient.height <= 0 || this.patient.weight <= 0) {
+      this.openDialog('error', 'Invalid Input', 'Height and weight must be positive values.');
+      return;
+    }
+
+    if (this.patient.ap_hi <= 0 || this.patient.ap_lo <= 0) {
+      this.openDialog('error', 'Invalid Input', 'Blood pressure must be positive.');
+      return;
+    }
+
+    if (this.patient.ap_lo >= this.patient.ap_hi) {
+      this.openDialog('error', 'Invalid Input', 'Diastolic cannot exceed systolic.');
+      return;
+    }
 
     const payload = {
       ...this.patient,
@@ -61,12 +91,13 @@ export class PredictComponent {
 
     this.result = null;
     this.isLoading = true;
-    
+
     this.service.predict(this.model, payload).subscribe({
       next: res => {
         this.result = res;
         console.log(res);
         this.isLoading = false;
+        this.openDialog('message',res['prediction'], res['probability'] )
       },
       error: err => (this.result = { prediction: 'Error', probability: err.message })
     });
@@ -78,5 +109,16 @@ export class PredictComponent {
 
   get glucoseProgress() {
     return ((this.patient.gluc - 1) / 2) * 100;
+  }
+
+  openDialog(type: DialogType, title: string, message: string) {
+    this.dialogType = type;
+    this.dialogTitle = title;
+    this.dialogMessage = message;
+    this.showDialog = true;
+  }
+
+  onDialogClosed() {
+    this.showDialog = false;
   }
 }

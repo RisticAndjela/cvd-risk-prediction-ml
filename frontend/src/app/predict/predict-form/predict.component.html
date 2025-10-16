@@ -3,7 +3,6 @@
 
   <form (ngSubmit)="onSubmit()" #predictForm="ngForm">
 
-    <!-- 1. Demographics -->
     <fieldset>
       <legend>Demographics</legend>
 
@@ -17,7 +16,6 @@
       </select>
     </fieldset>
 
-    <!-- 2. Risk factors & vital parameters -->
     <fieldset>
       <legend>Risk Factors & Vital Parameters</legend>
 
@@ -60,7 +58,6 @@
       </div>
     </fieldset>
 
-    <!-- 3. Biochemical parameters -->
     <fieldset>
       <legend>Biochemical Parameters</legend>
 
@@ -91,7 +88,6 @@
       </div>
     </fieldset>
 
-    <!-- Model & submit -->
     <label for="model">Model</label>
     <select id="model" [(ngModel)]="model" name="model" required>
       <option value="random_forest">Random Forest</option>
@@ -114,3 +110,11 @@
     <p>Predicting, please wait...</p>
   </div>
 </div>
+
+<app-dialog
+  *ngIf="showDialog"
+  [type]="dialogType"
+  [title]="dialogTitle"
+  [message]="dialogMessage"
+  (closed)="onDialogClosed()">
+</app-dialog>

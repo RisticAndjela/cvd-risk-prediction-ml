@@ -1,21 +1,18 @@
-import os
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-import joblib
+import os
 
 class DatasetLoader:
     def __init__(self, data_dir="./data"):
         self.data_dir = data_dir
-        self.scaler = StandardScaler()
 
     def load_data(self, subset="train"):
         path = os.path.join(self.data_dir, f"{subset}_data.csv")
         df = pd.read_csv(path, sep=",")
         return df
 
-    def preprocess(self, df, fit_scaler=False):
-        numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc"]
+    def preprocess(self, df):
+        numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc", "BMI", "ap_ratio"]
         categorical_features = ["gender", "cholesterol", "smoke", "alco", "active"]
 
         num_imputer = SimpleImputer(strategy="median")
@@ -24,12 +21,6 @@ class DatasetLoader:
         df[numeric_features] = num_imputer.fit_transform(df[numeric_features])
         df[categorical_features] = cat_imputer.fit_transform(df[categorical_features])
 
-        if fit_scaler:
-            df[numeric_features] = self.scaler.fit_transform(df[numeric_features])
-            joblib.dump(self.scaler, "./models/scaler.joblib")
-        else:
-            df[numeric_features] = self.scaler.transform(df[numeric_features])
-
         return df
 
     def get_datasets(self):
@@ -37,7 +28,7 @@ class DatasetLoader:
         val = self.load_data("validation")
         test = self.load_data("test")
 
-        train = self.preprocess(train, fit_scaler=True)
+        train = self.preprocess(train)
         val = self.preprocess(val)
         test = self.preprocess(test)
 

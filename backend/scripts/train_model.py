@@ -13,29 +13,25 @@ def main():
     X_val = val.drop(columns=["id", "cardio"])
     y_val = val["cardio"]
 
-    print("🔧 Skaliranje numeričkih kolona...")
-    numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc"]
+    numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc", "BMI", "ap_ratio"]
     scaler = StandardScaler()
     X_train[numeric_features] = scaler.fit_transform(X_train[numeric_features])
     X_val[numeric_features] = scaler.transform(X_val[numeric_features])
 
-    joblib.dump(scaler, "./models/scaler.joblib")
-
-    print("🔧 Trening modela...")
+    joblib.dump(scaler, "./models/trained/scaler.joblib")
     trainer = ModelTrainer()
-
     results = {}
 
     for model_name in ["logistic_regression", "random_forest", "xgboost"]:
-        print(f"\n🧠 Treniram model: {model_name}")
+        print(f"\nCurrent model: {model_name}")
         model, metrics = trainer.train_and_evaluate(model_name, X_train, y_train, X_val, y_val)
-        trainer.save_model(model, f"./models/{model_name}.joblib")
+        trainer.save_model(model, f"./models/trained/{model_name}.joblib")
         results[model_name] = metrics
 
-    with open("./models/train_columns.json", "w") as f:
+    with open("./models/trained/train_columns.json", "w") as f:
         json.dump(list(X_train.columns), f)
 
-    print("\n✅ Trening završen. Rezultati:")
+    print("\nRESULTS:")
     for name, metrics in results.items():
         print(f"\nModel: {name}")
         for m, v in metrics.items():
