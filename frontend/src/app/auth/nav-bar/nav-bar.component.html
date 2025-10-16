@@ -1,0 +1,17 @@
+<nav class="navbar">
+  <div class="navbar-left">
+    <button class="menu-btn" (click)="toggleMenu()">☰</button>
+    <a class="navbar-brand" routerLink="/">CVD predictor</a>
+  </div>
+</nav>
+
+<div class="sidebar" [class.open]="menuOpen">
+  <a class="close-btn" (click)="toggleMenu()">×</a>
+  <ul>
+    <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="toggleMenu()">Homepage</a></li>
+    <li><a routerLink="/evaluate" routerLinkActive="active" (click)="toggleMenu()">Evaluate</a></li>
+    <li><a routerLink="/predict" routerLinkActive="active" (click)="toggleMenu()">Predict</a></li>
+  </ul>
+</div>
+
+<div class="overlay" *ngIf="menuOpen" (click)="toggleMenu()"></div>

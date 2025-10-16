@@ -1,7 +1,8 @@
+import os
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
-import os
+import joblib
 
 class DatasetLoader:
     def __init__(self, data_dir="./data"):
@@ -14,22 +15,18 @@ class DatasetLoader:
         return df
 
     def preprocess(self, df, fit_scaler=False):
-        # numeričke kolone za skaliranje i imputaciju
         numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc"]
-        # kategorijske kolone su numeričke, samo imputacija
         categorical_features = ["gender", "cholesterol", "smoke", "alco", "active"]
 
-        # imputacija numeričkih
         num_imputer = SimpleImputer(strategy="median")
-        df[numeric_features] = num_imputer.fit_transform(df[numeric_features])
-
-        # imputacija "kategorijskih" koje su numeričke
         cat_imputer = SimpleImputer(strategy="most_frequent")
+
+        df[numeric_features] = num_imputer.fit_transform(df[numeric_features])
         df[categorical_features] = cat_imputer.fit_transform(df[categorical_features])
 
-        # skaliranje samo numeričkih
         if fit_scaler:
             df[numeric_features] = self.scaler.fit_transform(df[numeric_features])
+            joblib.dump(self.scaler, "./models/scaler.joblib")
         else:
             df[numeric_features] = self.scaler.transform(df[numeric_features])
 

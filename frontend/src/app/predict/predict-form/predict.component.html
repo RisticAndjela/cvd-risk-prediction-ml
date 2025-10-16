@@ -1,0 +1,116 @@
+<div class="form-container">
+  <h2>Cardiovascular Risk Prediction</h2>
+
+  <form (ngSubmit)="onSubmit()" #predictForm="ngForm">
+
+    <!-- 1. Demographics -->
+    <fieldset>
+      <legend>Demographics</legend>
+
+      <label for="birthDate">Date of Birth</label>
+      <input type="date" id="birthDate" [(ngModel)]="birthDate" name="birthDate" (change)="updateAge()" required />
+
+      <label for="gender">Gender</label>
+      <select id="gender" [(ngModel)]="patient.gender" name="gender" required>
+        <option [value]="1">Female</option>
+        <option [value]="2">Male</option>
+      </select>
+    </fieldset>
+
+    <!-- 2. Risk factors & vital parameters -->
+    <fieldset>
+      <legend>Risk Factors & Vital Parameters</legend>
+
+      <label for="height">Height (cm)</label>
+      <input type="number" id="height" [(ngModel)]="patient.height" name="height" required />
+
+      <label for="weight">Weight (kg)</label>
+      <input type="number" id="weight" [(ngModel)]="patient.weight" name="weight" step="0.1" required />
+      
+      <label for="ap_hi">Systolic BP</label>
+      <input type="number" id="ap_hi" [(ngModel)]="patient.ap_hi" name="ap_hi" required />
+
+      <label for="ap_lo">Diastolic BP</label>
+      <input type="number" id="ap_lo" [(ngModel)]="patient.ap_lo" name="ap_lo" required />
+
+      <div class="toggle-buttons">
+        <div>
+          <label>Smoke</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="patient.smoke" name="smoke">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div>
+          <label>Alcohol</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="patient.alco" name="alco">
+            <span class="slider round"></span>
+          </label>
+        </div>
+
+        <div>
+          <label>Physical activity</label>
+          <label class="switch">
+            <input type="checkbox" [(ngModel)]="patient.active" name="active">
+            <span class="slider round"></span>
+          </label>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- 3. Biochemical parameters -->
+    <fieldset>
+      <legend>Biochemical Parameters</legend>
+
+      <div class="slider-wrapper">
+        <label>Cholesterol</label>
+        <div class="three-step-slider" [ngStyle]="{'--progress': cholesterolProgress + '%'}">
+          <div class="step" 
+               *ngFor="let val of steps" 
+               [class.active]="patient.cholesterol === val"
+               (click)="patient.cholesterol = val"
+               [title]="val === 1 ? 'Normal' : val === 2 ? 'Above normal' : 'High'">
+            <span class="tooltip">{{ val === 1 ? 'Normal' : val === 2 ? 'Above normal' : 'High' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="slider-wrapper">
+        <label>Glucose</label>
+        <div class="three-step-slider" [ngStyle]="{'--progress': glucoseProgress + '%'}">
+          <div class="step" 
+               *ngFor="let val of steps" 
+               [class.active]="patient.gluc === val"
+               (click)="patient.gluc = val"
+               [title]="val === 1 ? 'Normal' : val === 2 ? 'Above normal' : 'High'">
+            <span class="tooltip">{{ val === 1 ? 'Normal' : val === 2 ? 'Above normal' : 'High' }}</span>
+          </div>
+        </div>
+      </div>
+    </fieldset>
+
+    <!-- Model & submit -->
+    <label for="model">Model</label>
+    <select id="model" [(ngModel)]="model" name="model" required>
+      <option value="random_forest">Random Forest</option>
+      <option value="xgboost">XGBoost</option>
+      <option value="logistic_regression">Logistic Regression</option>
+    </select>
+
+    <button type="submit" [disabled]="predictForm.invalid">Predict</button>
+  </form>
+
+  <div *ngIf="result" class="result">
+    {{ result.prediction }} <br/>
+    {{ result.probability }}
+  </div>
+</div>
+
+<div class="loader-overlay" *ngIf="isLoading">
+  <div class="loader-dialog">
+    <div class="spinner"></div>
+    <p>Predicting, please wait...</p>
+  </div>
+</div>
