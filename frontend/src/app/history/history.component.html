@@ -1,0 +1,36 @@
+<div class="history-container">
+  <h2>Prediction History</h2>
+
+  <div *ngIf="history.length > 0; else empty">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Result</th>
+          <th>Input Summary</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of history; index as i">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.date }}</td>
+          <td>
+            <span class="result" [class.positive]="item.result === 'High risk'" [class.negative]="item.result === 'Low risk'">
+              {{ item.result }}
+            </span>
+          </td>
+          <td>
+            <pre>{{ item.input | json }}</pre>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="clear-btn" (click)="clearHistory()">Clear History</button>
+  </div>
+
+  <ng-template #empty>
+    <p class="empty">No previous predictions found.</p>
+  </ng-template>
+</div>

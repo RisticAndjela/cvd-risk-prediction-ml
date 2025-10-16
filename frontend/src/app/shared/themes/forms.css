@@ -35,7 +35,6 @@ fieldset label {
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
 }
 
-/* === Form title === */
 .form-container h2 {
   text-align: center;
   color: #ff4c4c;
@@ -45,7 +44,6 @@ fieldset label {
   letter-spacing: 1px;
 }
 
-/* === Labels and inputs === */
 .form-container label {
   display: block;
   margin-bottom: 0.5rem;
@@ -76,7 +74,6 @@ fieldset label {
   outline: none;
 }
 
-/* === Button === */
 .form-container button {
   width: 100%;
   padding: 0.7rem;
@@ -93,11 +90,9 @@ fieldset label {
 
 .form-container button:hover {
   background: linear-gradient(135deg, #d71e1e, #ff4c4c);
-  transform: scale(1.05);
   box-shadow: 0 10px 25px rgba(215, 30, 30, 0.6);
 }
 
-/* === Prediction result === */
 .result {
   margin-top: 1.5rem;
   padding: 1.2rem;
@@ -110,7 +105,6 @@ fieldset label {
   box-shadow: 0 5px 15px rgba(215, 30, 30, 0.4);
 }
 
-/* === Toggle switches === */
 .toggle-buttons {
   display: flex;
   justify-content: space-around;
@@ -153,7 +147,6 @@ input:checked + .slider::before {
   transform: translateX(30px);
 }
 
-/* === Three-step slider === */
 .three-step-slider {
   position: relative;
   display: flex;
@@ -218,7 +211,6 @@ input:checked + .slider::before {
   bottom: 160%;
 }
 
-/* === Inputs hover glow === */
 .form-container input:hover,
 .form-container select:hover {
   box-shadow: 0 0 8px rgba(255, 76, 76, 0.5);
@@ -258,4 +250,62 @@ input:checked + .slider::before {
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+.table-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.metrics-table {
+  width: 100%;
+  max-width: 480px;
+  border-collapse: collapse;
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, #00264d, #001a33);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  color: #e6f1ff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.metrics-table thead {
+  background: linear-gradient(90deg, #cae0e8, #ADD8E6);
+  color: #001a33;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.metrics-table th,
+.metrics-table td {
+  padding: 12px 18px;
+  text-align: left;
+}
+
+.metrics-table tbody tr {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.3s ease;
+}
+
+.metrics-table tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.metrics-table tbody tr:hover {
+  background: rgba(255, 76, 76, 0.15);
+}
+
+.metrics-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  color: #ff7b7b;
+}
+
+.metrics-table th:first-child {
+  border-top-left-radius: 14px;
+}
+
+.metrics-table th:last-child {
+  border-top-right-radius: 14px;
 }

@@ -7,11 +7,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { App } from './app.component';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "./auth/nav-bar/nav-bar.component";
+import { HistoryComponent } from './history/history.component';
 
 @NgModule({
   declarations: [
     App,
-    NavbarComponent
+    NavbarComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,

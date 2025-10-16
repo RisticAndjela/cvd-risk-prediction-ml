@@ -5,6 +5,18 @@ import { DialogType, DialogComponent } from '../../shared/dialogs/message-dialog
 
 type BooleanFields = 'smoke' | 'alco' | 'active';
 type Step3 = 1 | 2 | 3;
+	
+interface PredictionResult {
+  prediction: string;
+  probability: Record<string, number>;
+}
+interface HistoryEntry {
+  date: string;
+  input: Patient;
+  result: string;
+  probability: Record<string, number>;
+  model: string;
+}
 
 @Component({
   selector: 'app-predict',
@@ -98,9 +110,23 @@ export class PredictComponent {
         console.log(res);
         this.isLoading = false;
         this.openDialog('message',res['prediction'], res['probability'] )
+        this.saveToHistory(payload, res);
       },
       error: err => (this.result = { prediction: 'Error', probability: err.message })
     });
+  }
+
+  saveToHistory(patientInput: any, result: PredictionResult): void {
+    const history: HistoryEntry[] = JSON.parse(localStorage.getItem('cvd_history') || '[]');
+    const newEntry: HistoryEntry = {
+      date: new Date().toLocaleString(),
+      input: patientInput,
+      result: result.prediction,
+      probability: result.probability,
+      model: this.model
+    };
+    history.unshift(newEntry);
+    localStorage.setItem('cvd_history', JSON.stringify(history.slice(0, 10)));
   }
 
   get cholesterolProgress() {

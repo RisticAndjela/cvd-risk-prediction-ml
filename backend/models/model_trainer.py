@@ -8,13 +8,12 @@ from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_sc
 class ModelTrainer:
     def __init__(self):
         self.models = {
-            "logistic_regression": LogisticRegression(max_iter=1000),
+            "logistic_regression": LogisticRegression(max_iter=5000),
             "random_forest": RandomForestClassifier(
-                n_estimators=200, max_depth=10, random_state=42, n_jobs=-1
+                n_estimators=500, max_depth=None, random_state=42, n_jobs=-1
             ),
             "xgboost": XGBClassifier(
-                n_estimators=200, max_depth=6, learning_rate=0.1,
-                use_label_encoder=False, eval_metric="logloss", random_state=42
+                n_estimators=500, max_depth=None, learning_rate=0.05, use_label_encoder=False, eval_metric="logloss", random_state=42, n_jobs=-1, tree_method="hist"
             ),
         }
 
