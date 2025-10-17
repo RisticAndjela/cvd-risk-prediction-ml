@@ -50,10 +50,10 @@ def predict(body: BodyRequest):
         predictor = models[model_name]
         prediction, probability = predictor.predict(patient_dict)
         probability *= 100
-
+        risk_labels = {0: "Low risk", 1: "Medium risk", 2: "High risk"}
         return {
             "model": model_name,
-            "prediction": "Most likely to have CVD" if prediction == 1 else "Most likely not to have CVD",
+            "prediction": risk_labels[prediction],
             "probability": f"{probability:.2f}%"
         }
 

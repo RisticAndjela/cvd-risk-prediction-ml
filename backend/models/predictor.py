@@ -27,6 +27,13 @@ class Predictor:
         numeric_features = ["age", "height", "weight", "ap_hi", "ap_lo", "gluc", "BMI", "ap_ratio"]
         data[numeric_features] = self.scaler.transform(data[numeric_features])
 
-        pred = self.model.predict(data)[0]
         prob = self.model.predict_proba(data)[0, 1]
-        return int(pred), float(prob)
+
+        if prob < 0.33:
+            pred_class = 0  # low risk
+        elif prob < 0.66:
+            pred_class = 1  # medium risk
+        else:
+            pred_class = 2  # high risk
+
+        return pred_class, float(prob)
